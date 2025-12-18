@@ -40,8 +40,10 @@ pipeline {
     
     post {
         always {
-            echo 'Cleaning up workspace...'  // Regular quotes
-            deleteDir()
+	   node{
+            	echo 'Cleaning up workspace...'  // Regular quotes
+            	deleteDir()
+	   }
         }
         success {
             echo 'Pipeline succeeded!'

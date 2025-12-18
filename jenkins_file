@@ -1,0 +1,53 @@
+pipeline {
+    agent any 
+    
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhubID')  // lowercase 'c'
+        IMAGE_NAME = 'josh57/my-webapp'
+    }
+    
+    stages {
+        stage('Checkout') {  // Fixed quotes: '' not ''
+            steps {
+                
+                git(
+                    url: 'https://github.com/joshua-mnz/my-app',
+                    branch: 'main'
+                )
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // FIX: Use ${} for variable interpolation
+                    dockerImage = docker.build("${IMAGE_NAME}:latest")
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    // FIX: Correct Docker registry URL
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhubID') {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Cleaning up workspace...'  // Regular quotes
+            deleteDir()
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

@@ -39,11 +39,8 @@ pipeline {
     }
     
     post {
-        always {
-	   node{
-            	echo 'Cleaning up workspace...'  // Regular quotes
-            	deleteDir()
-	   }
+	   always {
+        cleanWs()  // ✅ Simple and works
         }
         success {
             echo 'Pipeline succeeded!'

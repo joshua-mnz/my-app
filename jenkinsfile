@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'ls -la'
+            }
+        }
+        
+        stage('Test Docker') {
+            steps {
+                sh '''
+                    echo "=== Testing Docker ==="
+                    docker --version || echo "Docker not installed"
+                    echo "=== Current directory ==="
+                    pwd
+                    echo "=== Files ==="
+                    find . -type f -name "Dockerfile" -o -name "*.py" -o -name "*.txt"
+                '''
+            }
+        }
+    }
+}

@@ -39,9 +39,11 @@ pipeline {
     }
     
     post {
-	   always {
-        cleanWs()  // ✅ Simple and works
-        }
+		always{
+			echo ‘Cleaning up workspace…’
+			deleteDir()
+			}
+
         success {
             echo 'Pipeline succeeded!'
         }

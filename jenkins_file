@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhubID')  // lowercase 'c'
-        IMAGE_NAME = 'josh57/my-webapp'
+        IMAGE_NAME = "josh57/my-webapp"
     }
     
     stages {
@@ -11,7 +11,7 @@ pipeline {
             steps {
                 
                 git(
-                    url: 'https://github.com/joshua-mnz/my-app',
+                    url: 'git@github.com:joshua-mnz/my-app.git',
                     branch: 'main'
                 )
             }
@@ -20,7 +20,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // FIX: Use ${} for variable interpolation
                     dockerImage = docker.build("${IMAGE_NAME}:latest")
                 }
             }
@@ -29,8 +28,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // FIX: Correct Docker registry URL
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhubID') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         dockerImage.push()
                     }
                 }

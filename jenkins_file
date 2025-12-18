@@ -39,10 +39,6 @@ pipeline {
     }
     
     post {
-		always{
-			echo 'Cleaning up workspace…'
-			deleteDir()
-			}
 
         success {
             echo 'Pipeline succeeded!'
@@ -50,5 +46,9 @@ pipeline {
         failure {
             echo 'Pipeline failed!'
         }
+		always{
+			echo 'Cleaning up workspace…'
+			deleteDir()
+			}
     }
 }
